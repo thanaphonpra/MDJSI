@@ -1,0 +1,141 @@
+<template>
+  <div>
+    
+<div id="svg-container">
+<div id="test1111" >
+<table style="width:100%">
+  <tr>
+    <td style="width:50%">
+      <h1>Other SVG</h1>
+      <br>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Simple_Globe.svg" />
+    </td>
+    <td style="width:50%">
+      <h1>Omise SVG</h1>
+      <br>
+      <!-- <svg xmlns:xlink="https://api.omise.co/charges/chrg_test_5rva1ig9qufi75w68hl/documents/docu_test_5rva1iijllzle09jsf3/downloads/75B7EF7A07A822B7" width="300" height="600" ></svg> -->
+      <svg id="test1111" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="600">
+      <image href="https://api.omise.co/charges/chrg_test_5rva1ig9qufi75w68hl/documents/docu_test_5rva1iijllzle09jsf3/downloads/75B7EF7A07A822B7" width="300" height="600"/>
+      </svg>
+      <!-- <img id="test1111" src="https://api.omise.co/charges/chrg_test_5rva1ig9qufi75w68hl/documents/docu_test_5rva1iijllzle09jsf3/downloads/75B7EF7A07A822B7" width="300" height="600"/>     -->
+    </td>
+  </tr>
+</table>
+</div>
+
+    <button @click="htmlToCanvas()">Convert</button>
+    <button @click="download()">Download</button>
+        </div>
+    <img src="https://media3.giphy.com/media/hJl9v892gjwLEdHoZv/giphy.gif" style="width: 100px;" />
+    <br>
+    <!-- <h1>****************************Canvas Result*********************************</h1> -->
+    
+        
+  </div>
+</template>
+
+<script>
+import html2canvas from 'html2canvas'
+export default {
+  name: 'HelloWorld',
+  data() {
+    // return {scr_img:'https://api.omise.co/charges/chrg_test_5rva1ig9qufi75w68hl/documents/docu_test_5rva1iijllzle09jsf3/downloads/75B7EF7A07A822B7'}
+  },
+  props: {
+    msg: String
+  },
+   methods: {
+test1:function(){
+  var request = new XMLHttpRequest();
+  request.withCredentials = true;
+request.open('GET', "https://api.omise.co/charges/chrg_test_5rva1ig9qufi75w68hl/documents/docu_test_5rva1iijllzle09jsf3/downloads/75B7EF7A07A822B7", true);
+request.responseType = 'blob';
+request.onload = function() {
+    var reader = new FileReader();
+    reader.readAsDataURL(request.response);
+    reader.onload =  function(e){
+        console.log('DataURL:', e.target.result);
+    };
+};
+request.send();
+},
+  download:function(){
+    var img222 = new Image(),
+        serializer = new XMLSerializer(),
+        svgStr = serializer.serializeToString(document.getElementById('test1111'));
+
+      img222.src = 'data:image/svg+xml;base64,'+window.btoa(svgStr);
+
+//       var data = new XMLSerializer().serializeToString(document.querySelector('svg'));
+// img.src = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(data);
+
+
+      console.log("SVG BASE64",'data:image/svg+xml;base64,'+window.btoa(svgStr));
+    // You could also use the actual string without base64 encoding it:
+    //img.src = "data:image/svg+xml;utf8," + svgStr;
+      img222.onload = function() {
+        console.log("load success!!!!");
+		var canvas = document.createElement('canvas');
+        alert('created new canvas');
+        canvas.width = img222.width;
+        canvas.height = img222.height;
+        alert('assigned canvas width and height');
+        var context = canvas.getContext("2d");
+        context.drawImage(img222, 0, 0);
+        document.body.appendChild(canvas);
+          
+        // alert('drew image into canvas');
+
+        // var a = document.createElement("a");
+          
+        // alert('created anchor');
+          
+        // a.download = "image.png";
+          
+        // alert('assigned anchor download property');
+          
+        // a.href = canvas.toDataURL("image/png");
+          
+        // alert('converted canvas to data-URL, assigned to anchor');
+          
+        // a.click();
+          
+        // alert('triggered anchor click');
+          
+          }
+        },
+  htmlToCanvas:function(){
+      html2canvas(document.getElementById('test1111'),{
+        allowTaint: true,
+        foreignObjectRendering: true,}).then(function(canvas) {
+            document.body.appendChild(canvas);
+            var a = document.createElement("a");
+            a.download = "image.png";
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+      });
+    }
+   },
+    mounted: function() {
+    }
+}
+
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
